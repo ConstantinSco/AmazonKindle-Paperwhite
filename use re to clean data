@@ -1,0 +1,15 @@
+"""
+所做的只是简单的提取出中文评论
+因为我找了半天，发现只能用正则表达式来处理文档，希望接下来的学习能学到其他方法来处理文档，因为BeautifulSoup只能处理网页吧
+"""
+import re
+
+file = open(r'C:\Users\sco\Desktop\AmazonData.txt','r',encoding='utf-8').read()
+r = re.findall(r'<span class="a-size-base review-text" data-hook="review-body">.*?</span>',file)
+for x in r:
+    y = re.sub(r'<span class="a-size-base review-text" data-hook="review-body">','',x)
+    z = re.sub(r'</span>','',y)
+    z = z + '\n'
+    html = open(r'C:\Users\sco\Desktop\AmazonDataAnalysis.txt','a',encoding='utf-8')
+    html.write(z)
+    html.close()
