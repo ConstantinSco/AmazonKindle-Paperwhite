@@ -1,0 +1,43 @@
+"""
+初步尝试用词云来分析，目前主要还是在学习爬虫，这只是简陋的尝试
+后期可以用matlib来进行更好的处理，涉及数据可视化，希望能高大上一点
+爬虫其实只是大数据的简单的一部，关键还是在后期的数据处理和可视化，那才是需要大量时间的地方，也充满技巧和挑战
+"""
+from os import path
+import matplotlib.pyplot as plt
+from wordcloud import WordCloud,STOPWORDS,ImageColorGenerator
+import pickle
+import jieba
+import codecs
+text = ''
+with open(r'C:\Users\sco\Desktop\AmazonData.txt','r',encoding='utf-8') as fin:
+    for line in fin.readlines():
+        line = line.strip('\n')
+        text += ' '.join(jieba.cut(line))
+        text += ' '
+        fout = open(r'C:\Users\sco\Desktop\1.txt','wb')
+        pickle.dump(text,fout)
+        fout.close()
+        fr=open(r'C:\Users\sco\Desktop\1.txt','rb')
+        text=pickle.load(fr)
+        print("加载成功")
+        backgroud_Image=plt.imread(r'C:\Users\sco\Desktop\jys.jpg')
+        print('加载图片成功！')
+        '''设置词云样式'''
+        wc=WordCloud(
+        background_color='white',
+        mask=backgroud_Image,
+        font_path=r'C:\Windows\Fonts\simsun.ttc', #若是有中文的话，这句代码必须添加，不然会出现方框，不出现汉字
+        max_words=2000,
+        stopwords=STOPWORDS,
+        max_font_size=150,
+        random_state=30
+        )
+wc.generate_from_text(text)
+print('开始加载文本')
+img_colors=ImageColorGenerator(backgroud_Image)
+wc.recolor(color_func=img_colors)
+plt.imshow(wc)
+plt.axis('off')
+plt.show()
+print('display success!')
